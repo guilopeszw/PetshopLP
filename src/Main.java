@@ -1,61 +1,47 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        List<ServicoPetshopIF> servicos = new ArrayList<>();
-        int codigoBanho = 1000;
-        int codigoTosa = 2000;
-        int codigoHotel = 3000;
+        InventarioPetshop inventario = new InventarioPetshop();
 
-        System.out.println("Seja bem-vindo(a) ao sistema! ");
+        System.out.println("Seja bem-vindo(a) ao sistema do Petshop!");
         int escolha = getEscolha(sc);
 
         while (escolha >= 1 && escolha <= 3) {
+            TamAnimal tamAnimal = getTamAnimal(sc);
+            int codigo = 1 + inventario.listarServicos().size();
+
+            int antes = inventario.listarServicos().size();
             switch (escolha) {
                 case 1:
-                    TamAnimal tamAnimal = getTamAnimal(sc);
-                    int codigo = codigoTosa + servicos.size();
 
-                    int antes = servicos.size();
-                    Tosa tosa = new Tosa(codigo, tamAnimal);
-                    servicos.add(tosa);
-                    checaAdd(servicos, antes);
+                    inventario.adicionaServico(new Tosa(codigo, tamAnimal));
                     break;
 
                 case 2:
-                    tamAnimal = getTamAnimal(sc);
                     TamPelo tamPelo = getTamPelo(sc);
-                    codigo = codigoBanho + servicos.size();
-
-                    antes = servicos.size();
-                    Banho banho = new Banho(codigo, tamAnimal, tamPelo);
-                    servicos.add(banho);
-                    checaAdd(servicos, antes);
+                    inventario.adicionaServico(new Banho(codigo, tamAnimal, tamPelo));
                     break;
 
                 case 3:
-                    tamAnimal = getTamAnimal(sc);
                     System.out.println("Informe a duração da hospedagem em horas: ");
                     int qtdHoras = sc.nextInt();
-                    codigo = codigoHotel + servicos.size();
-
-                    antes = servicos.size();
-                    Hotel hotel = new Hotel(codigo, tamAnimal, qtdHoras);
-                    servicos.add(hotel);
-                    checaAdd(servicos, antes);
+                    sc.nextLine();
+                    inventario.adicionaServico(new Hotel(codigo, tamAnimal, qtdHoras));
                     break;
+
             }
-            getValor(servicos);
+            checaAdd(inventario, antes);
+            System.out.println("Valor = R$: " + inventario.calculaValorServico());
+            System.out.println(" \n");
             escolha = getEscolha(sc);
         }
-    }
-
-    private static void getValor(List<ServicoPetshopIF> servicos) {
-        System.out.println("Valor = R$: " + servicos.getLast().calculaPreco());
+        sc.close();
+        System.out.println(inventario.listarServicos());
+        System.out.println("Sistema fechado com êxito.");
+        System.exit(0);
     }
 
     private static TamPelo getTamPelo(Scanner sc) {
@@ -75,12 +61,13 @@ public class Main {
         return tamPelo;
     }
 
-    private static void checaAdd(List<ServicoPetshopIF> servicos, int antes) {
-        if (servicos.size() == antes) {
+    private static void checaAdd(InventarioPetshop inventario, int antes) {
+        if (inventario.listarServicos().size() == antes) {
             System.err.println("Houve um erro ao adicionar o serviço. ");
         }
         else {
             System.out.println("Serviço adicionado com sucesso! ");
+            System.out.println(inventario.listarServicos().getLast());
         }
     }
 
@@ -94,7 +81,7 @@ public class Main {
         if (Objects.equals(tamanho, "pequeno") || Objects.equals(tamanho, "PEQUENO")) {
             tamAnimal = TamAnimal.PEQUENO;
         }
-        if (Objects.equals(tamanho, "médio") || tamanho == "medio" || Objects.equals(tamanho, "MEDIO") || tamanho == "MÉDIO") {
+        if (Objects.equals(tamanho, "médio") || Objects.equals(tamanho, "medio") || Objects.equals(tamanho, "MEDIO") || Objects.equals(tamanho, "MÉDIO")) {
             tamAnimal = TamAnimal.MEDIO;
         }
         if (Objects.equals(tamanho, "grande") || Objects.equals(tamanho, "GRANDE")) {
@@ -105,10 +92,11 @@ public class Main {
 
     private static int getEscolha(Scanner sc) {
         String prompt = """
-                Nos informe agendado:\s
+                Agende:\s
                 1. Tosa;\s
                 2. Banho;\s
                 3. Hotel;\s
+                4. Fechar sistema;\s
                 INSIRA O QUE DESEJA:\s""";
         System.out.println(prompt);
         return sc.nextInt();

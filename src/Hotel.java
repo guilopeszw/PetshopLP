@@ -5,13 +5,15 @@ public class Hotel implements ServicoPetshopIF {
     private TamAnimal tamAnimal;
     private int qtdHoras;
 
-    public Hotel(int codigo, TamAnimal tamanho, int qtdHoras) {
+    public Hotel(int codigo, TamAnimal tamAnimal, int qtdHoras) {
+        this.codigo = codigo;
+        this.tamAnimal = tamAnimal;
         this.qtdHoras = qtdHoras;
     }
 
     @Override
     public double calculaPreco() {
-        return this.tamAnimal.getPrecoHotel() * qtdHoras;
+        return this.tamAnimal.getPrecoHotel() * this.qtdHoras;
     }
 
     @Override
@@ -22,18 +24,20 @@ public class Hotel implements ServicoPetshopIF {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Hotel hotel)) return false;
-        return qtdHoras == hotel.qtdHoras;
+        return codigo == hotel.codigo && qtdHoras == hotel.qtdHoras && tamAnimal == hotel.tamAnimal;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(qtdHoras);
+        return Objects.hash(codigo, tamAnimal, qtdHoras);
     }
 
     @Override
     public String toString() {
-        return "Hotel{" +
-                "qtdHoras=" + qtdHoras +
-                '}';
+        return "Hotel |" +
+                "código: " + codigo +
+                ", tamanho do animal: " + tamAnimal +
+                ", duração da estadia: " + qtdHoras +
+                " horas; ";
     }
 }
