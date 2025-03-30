@@ -2,23 +2,20 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public abstract class ServicoPetshop implements ServicoPetshopIF {
-    private LocalDate data;
+    private LocalDate data = LocalDate.now();
     private int codigo;
     private TamAnimal tamanho;
 
-    public ServicoPetshop(LocalDate data, TamAnimal tamanho) {
-        this.data = data;
+    public ServicoPetshop(int codigo, TamAnimal tamanho) {
+        this.codigo = codigo;
         this.tamanho = tamanho;
     }
-
 
     @Override
     abstract public double calculaPreco();
 
     @Override
-    public String descricao() {
-        return "";
-    }
+    public abstract String descricao();
 
     @Override
     public boolean equals(Object o) {
@@ -29,6 +26,18 @@ public abstract class ServicoPetshop implements ServicoPetshopIF {
     @Override
     public int hashCode() {
         return Objects.hash(data, codigo, tamanho);
+    }
+
+    public TamAnimal getTamanho() {
+        return tamanho;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public LocalDate getData() {
+        return data;
     }
 
     @Override

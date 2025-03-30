@@ -1,20 +1,19 @@
 import java.util.Objects;
 
-public class Banho implements ServicoPetshopIF {
-    private int codigo;
-    private TamAnimal tamAnimal;
-    TamPelo tamPelo;
-
-    public Banho(int codigo, TamAnimal tamAnimal, TamPelo tamPelo) {
-        this.codigo = codigo;
-        this.tamAnimal = tamAnimal;
+public class Banho extends ServicoPetshop {
+    private TamPelo tamPelo;
+    public Banho(int codigo, TamAnimal tamanho, TamPelo tamPelo) {
+        super(codigo, tamanho);
         this.tamPelo = tamPelo;
     }
 
+    public TamPelo getTamPelo() {
+        return tamPelo;
+    }
 
     @Override
     public double calculaPreco() {
-        return this.tamAnimal.getPrecoBanho() + this.tamPelo.getAdicionalBanho();
+        return getTamanho().getPrecoBanho() + tamPelo.getAdicionalBanho();
     }
 
     @Override
@@ -25,19 +24,20 @@ public class Banho implements ServicoPetshopIF {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Banho banho)) return false;
-        return codigo == banho.codigo && tamAnimal == banho.tamAnimal && tamPelo == banho.tamPelo;
+        if (!super.equals(o)) return false;
+        return tamPelo == banho.tamPelo;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigo, tamAnimal, tamPelo);
+        return Objects.hash(super.hashCode(), tamPelo);
     }
 
     @Override
     public String toString() {
         return "Banho | " +
-                "código: " + codigo +
-                ", tamanho do animal: " + tamAnimal +
+                "código: " + getCodigo() +
+                ", tamanho do animal: " + getTamanho() +
                 ", tamanho do pelo: " + tamPelo +
                 "; ";
     }

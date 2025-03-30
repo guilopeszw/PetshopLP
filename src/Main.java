@@ -4,42 +4,40 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        InventarioPetshop inventario = new InventarioPetshop();
+        Fachada fachada = new Fachada();
 
         System.out.println("Seja bem-vindo(a) ao sistema do Petshop!");
         int escolha = getEscolha(sc);
 
         while (escolha >= 1 && escolha <= 3) {
             TamAnimal tamAnimal = getTamAnimal(sc);
-            int codigo = 1 + inventario.listarServicos().size();
+             int codigo = fachada.proximoCodigo();
 
-            int antes = inventario.listarServicos().size();
             switch (escolha) {
                 case 1:
 
-                    inventario.adicionaServico(new Tosa(codigo, tamAnimal));
+                    fachada.adicionaServico(new Tosa(codigo, tamAnimal));
                     break;
 
                 case 2:
                     TamPelo tamPelo = getTamPelo(sc);
-                    inventario.adicionaServico(new Banho(codigo, tamAnimal, tamPelo));
+                    fachada.adicionaServico(fachada.criaServicoBanho(codigo, tamAnimal, tamPelo));
                     break;
 
                 case 3:
                     System.out.println("Informe a duração da hospedagem em horas: ");
                     int qtdHoras = sc.nextInt();
                     sc.nextLine();
-                    inventario.adicionaServico(new Hotel(codigo, tamAnimal, qtdHoras));
+                    fachada.adicionaServico(fachada.criaServicoHotel(codigo, tamAnimal, qtdHoras));
                     break;
 
             }
-            checaAdd(inventario, antes);
-            System.out.println("Valor = R$: " + inventario.calculaValorServico());
+            System.out.println("Valor = R$: " + fachada.calculaValorServico());
             System.out.println(" \n");
             escolha = getEscolha(sc);
         }
         sc.close();
-        System.out.println(inventario.listarServicos());
+        System.out.println(fachada.listarServicos());
         System.out.println("Sistema fechado com êxito.");
         System.exit(0);
     }
@@ -59,16 +57,6 @@ public class Main {
             tamPelo = TamPelo.LONGO;
         }
         return tamPelo;
-    }
-
-    private static void checaAdd(InventarioPetshop inventario, int antes) {
-        if (inventario.listarServicos().size() == antes) {
-            System.err.println("Houve um erro ao adicionar o serviço. ");
-        }
-        else {
-            System.out.println("Serviço adicionado com sucesso! ");
-            System.out.println(inventario.listarServicos().getLast());
-        }
     }
 
     private static TamAnimal getTamAnimal(Scanner sc) {

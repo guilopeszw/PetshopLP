@@ -10,18 +10,29 @@ public class InventarioPetshop {
     }
 
 
-    public List<ServicoPetshopIF> adicionaServico(ServicoPetshopIF servico) {
+    public void adicionaServico(ServicoPetshop servico) {
         servicos.add(servico);
-        return servicos;
+    }
+
+    public int proximoCodigo() {
+        return 1 + servicos.size();
     }
 
     public double calculaValorServico() {
         return servicos.getLast().calculaPreco();
     }
 
-    public List<ServicoPetshopIF> listarServicos() {
-        List<ServicoPetshopIF> servicos1 = servicos;
-        return servicos1;
+    public String listarServicos() {
+        double precoTotal = 0;
+        String listar = "";
+        for (ServicoPetshopIF servicoPetshop : servicos) {
+            listar += servicoPetshop.descricao();
+            listar += " R$: ";
+            listar += servicoPetshop.calculaPreco();
+            precoTotal += servicoPetshop.calculaPreco();
+            listar += " \n";
+        }
+        return listar + "R$: " + precoTotal;
     }
 
     @Override

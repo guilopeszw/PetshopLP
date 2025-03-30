@@ -1,17 +1,13 @@
 import java.util.Objects;
 
-public class Tosa implements ServicoPetshopIF{
-    private int codigo;
-    private TamAnimal tamAnimal;
-
-    public Tosa(int codigo, TamAnimal tamAnimal) {
-        this.codigo = codigo;
-        this.tamAnimal = tamAnimal;
+public class Tosa extends ServicoPetshop{
+    public Tosa(int codigo, TamAnimal tamanho) {
+        super(codigo, tamanho);
     }
 
     @Override
     public double calculaPreco() {
-        return this.tamAnimal.getPrecoTosa();
+        return getTamanho().getPrecoTosa();
     }
 
     @Override
@@ -21,20 +17,19 @@ public class Tosa implements ServicoPetshopIF{
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Tosa tosa)) return false;
-        return codigo == tosa.codigo && tamAnimal == tosa.tamAnimal;
+        return super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigo, tamAnimal);
+        return super.hashCode();
     }
 
     @Override
     public String toString() {
         return "Tosa | " +
-                "código: " + codigo +
-                ", tamanho do animal: " + tamAnimal +
+                "código: " + getCodigo() +
+                ", tamanho do animal: " + getTamanho() +
                 ';';
     }
 }
